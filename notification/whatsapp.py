@@ -31,23 +31,28 @@ def send_whatsapp(text: str) -> bool:
     try:
         response = httpx.post(url, headers=headers, json=payload, timeout=20)
         response.raise_for_status()
+        print("[JobPilot] WhatsApp message sent successfully!")
         return True
     except Exception as e:
         # If text fails, try template message
-        print(f"[JobPilot] Text message failed: {e}")
+        print(f"[JobPilot] WhatsApp text message failed: {e}")
         print("[JobPilot] Trying template message...")
         
-        template_payload = {
-            "messaging_product": "whatsapp",
-            "to": settings.whatsapp_to,
-            "type": "template",
-            "template": {
-                "name": "hello_world",
-                "language": {"code": "en_US"}
+        try:
+            template_payload = {
+                "messaging_product": "whatsapp",
+                "to": settings.whatsapp_to,
+                "type": "template",
+                "template": {
+                    "name": "hello_world",
+                    "language": {"code": "en_US"}
+                }
             }
-        }
-        
-        response = httpx.post(url, headers=headers, json=template_payload, timeout=20)
-        response.raise_for_status()
-        print("[JobPilot] Template message sent successfully!")
-        return True
+            
+            response = httpx.post(url, headers=headers, json=template_payload, timeout=20)
+            response.raise_for_status()
+            print("[JobPilot] Template message sent successfully!")
+            return True
+        except Exception as e2:
+            print(f"[JobPilot] Template message also failed: {e2}")
+            return False

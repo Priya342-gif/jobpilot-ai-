@@ -161,7 +161,30 @@ def scan_jobs_now(db: Session = Depends(get_db)):
             try:
                 from notification.whatsapp import send_whatsapp
                 if settings.whatsapp_to:
-                    send_whatsapp(f"🎯 JobPilot AI: Found {len(new_matches)} new job matches! Check your dashboard.")
+                    # Create professional message with job details
+                    if len(new_matches) == 1:
+                        j, m = new_matches[0]
+                        whatsapp_msg = f"""🎯 *JobPilot AI - New Job Match!*
+
+*{j.title}*
+Company: {j.company}
+Location: {j.location}
+Match Score: {m.score}%
+
+Apply here: {j.url}
+
+Good luck! 🚀"""
+                    else:
+                        top_jobs = "\n\n".join([f"*{i+1}. {j.title}*\n{j.company} | {m.score}% match\n{j.url}" for i, (j, m) in enumerate(new_matches[:3])])
+                        whatsapp_msg = f"""🎯 *JobPilot AI - {len(new_matches)} New Matches!*
+
+{top_jobs}
+
+{"" if len(new_matches) <= 3 else f"+ {len(new_matches) - 3} more jobs"}
+
+Check your dashboard for details! 🚀"""
+                    
+                    send_whatsapp(whatsapp_msg)
             except Exception as e:
                 print(f"WhatsApp notification failed: {e}")
         
