@@ -91,14 +91,14 @@ def demo_match(job: dict):
 def scan_jobs_now(db: Session = Depends(get_db)):
     """Manually trigger job scanning"""
     try:
-        from agents.job_search import search_jobs
+        from agents.job_search import discover_jobs
         from agents.matching_agent import match_job
         from notification.email import send_email_notification
         from notification.whatsapp import send_whatsapp_notification
         import json
         
         # Search for jobs
-        jobs = search_jobs()
+        jobs = discover_jobs()
         
         new_matches = []
         for job_data in jobs:
