@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JobPilot AI - Quick Access</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b1020;
+            color: #eef2ff;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: #121a30;
+            border-radius: 20px;
+            padding: 40px;
+            border: 2px solid #263250;
+        }
+        h1 {
+            color: #7ff0a9;
+            margin-bottom: 30px;
+        }
+        .btn {
+            display: block;
+            background: #3b82f6;
+            color: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #2563eb;
+        }
+        .notification-btn {
+            background: #10b981;
+        }
+        .notification-btn:hover {
+            background: #059669;
+        }
+        .info {
+            background: #1a2340;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #9aa7c2;
+        }
+        .qr-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #2d3748;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 JobPilot AI</h1>
+        <h2 style="color: #9aa7c2; font-size: 16px;">Quick Access Links</h2>
+        
+        <a href="/static/notification.html" class="btn notification-btn">
+            📬 Latest Job Notifications
+        </a>
+        
+        <a href="/" class="btn">
+            🌐 Full Dashboard
+        </a>
+        
+        <a href="/docs" class="btn">
+            📚 API Documentation
+        </a>
+        
+        <div class="info">
+            <strong>💡 Pro Tip:</strong>
+            <p>Bookmark this page on your phone!</p>
+            <p>When you get "Hello World" on WhatsApp, open this bookmark to see new jobs instantly.</p>
+        </div>
+        
+        <div class="qr-info">
+            <p style="color: #7ff0a9; font-weight: bold;">📱 Current Links:</p>
+            <p style="font-size: 12px; word-break: break-all;">
+                Notification: http://127.0.0.1:8000/static/notification.html<br>
+                Dashboard: http://127.0.0.1:8000<br>
+                Quick Access: http://127.0.0.1:8000/static/quick_access.html
+            </p>
+        </div>
+    </div>
+</body>
+</html>

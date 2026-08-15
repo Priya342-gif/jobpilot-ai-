@@ -1,0 +1,23 @@
+services:
+  jobpilot:
+    build: .
+    container_name: jobpilot-ai
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+
+  worker:
+    build: .
+    container_name: jobpilot-worker
+    command: python -m worker.scheduler
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    restart: unless-stopped

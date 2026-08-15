@@ -1,0 +1,30 @@
+PROFILE = {
+    "name": "Ayush Pandey",
+    "email": "ayushpandey1945@gmail.com",
+    "phone": "9795675534",
+    "degree": "B.Tech Electrical & Electronics Engineering",
+    "target_domains": [
+        "Embedded Systems",
+        "Firmware",
+        "IoT",
+        "AIoT",
+        "Robotics",
+        "Machine Learning",
+        "Artificial Intelligence",
+        "Drone/UAV",
+    ],
+    "skills": [
+        "Python", "C", "C++", "SQL", "Git", "Jupyter Notebook",
+        "TensorFlow", "Keras", "XGBoost", "Scikit-learn", "NumPy",
+        "Pandas", "Matplotlib", "Seaborn", "CNN", "ANN", "Random Forest",
+        "ESP32", "Arduino IDE", "MQTT", "Sensor Integration",
+        "I2C", "SPI", "UART", "LoRa",
+    ],
+    "projects": [
+        "Aerial Object Threat Classification",
+        "Handwritten Digit Classification (ANN)",
+        "Drone and robotics builds",
+        "Line-following and maze robot",
+        "Quadruped platform",
+    ],
+}

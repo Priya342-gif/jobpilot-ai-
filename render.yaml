@@ -1,0 +1,67 @@
+services:
+  # Web Service (API + Dashboard)
+  - type: web
+    name: jobpilot-ai-web
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_NAME
+        value: JobPilot AI
+      - key: SCAN_INTERVAL_MINUTES
+        value: 20
+      - key: MIN_MATCH_SCORE
+        value: 30
+      - key: AUTO_APPLY
+        value: false
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: NOTIFY_EMAIL_TO
+        sync: false
+      - key: WHATSAPP_ACCESS_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_TO
+        sync: false
+      - key: REMOTIVE_API_URL
+        value: https://remotive.com/api/remote-jobs
+
+  # Worker Service (Background Job Scanner)
+  - type: worker
+    name: jobpilot-ai-worker
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m worker.scheduler
+    envVars:
+      - key: SCAN_INTERVAL_MINUTES
+        value: 20
+      - key: MIN_MATCH_SCORE
+        value: 30
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: NOTIFY_EMAIL_TO
+        sync: false
+      - key: WHATSAPP_ACCESS_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_TO
+        sync: false
+
+databases:
+  - name: jobpilot-db
+    databaseName: jobpilot
+    user: jobpilot
