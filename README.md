@@ -729,11 +729,11 @@ candidate.**
 
 **Ayush Pandey**
 
-B.Tech Electrical & Electronics Engineering
+B.Tech Artificial Intelligence and Machine Learning
 
-GitHub: https://github.com/aayuk003
+GitHub: https://github.com/Priya342-gif
 
-Email: ayushpandey1945@gmail.com
+Email: chauhanpriya1926@gmail.com
 
 ------------------------------------------------------------------------
 
