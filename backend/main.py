@@ -100,8 +100,15 @@ def scan_jobs_now(db: Session = Depends(get_db)):
         
         new_matches = []
         for job_data in jobs:
+            # Generate external_id
+            external_id = job_data.get("external_id")
+            if not external_id:
+                # Create one from URL
+                import hashlib
+                external_id = hashlib.sha256(job_data["url"].encode()).hexdigest()
+            
             # Check if already exists
-            existing = db.query(Job).filter(Job.url == job_data["url"]).first()
+            existing = db.query(Job).filter(Job.external_id == external_id).first()
             if existing:
                 continue
             
@@ -113,6 +120,7 @@ def scan_jobs_now(db: Session = Depends(get_db)):
             
             # Save job
             job = Job(
+                external_id=external_id,
                 title=job_data["title"],
                 company=job_data["company"],
                 location=job_data.get("location", "Remote"),
