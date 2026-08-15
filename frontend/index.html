@@ -515,10 +515,16 @@
           <i class="fas fa-fire"></i>
           Top Job Matches
         </h2>
-        <button class="filter-btn" onclick="window.open('/docs', '_blank')">
-          <i class="fas fa-cog"></i>
-          API Docs
-        </button>
+        <div style="display: flex; gap: 12px;">
+          <button class="filter-btn" onclick="scanJobs()" id="scanBtn">
+            <i class="fas fa-sync"></i>
+            Scan Jobs Now
+          </button>
+          <button class="filter-btn" onclick="window.open('/docs', '_blank')">
+            <i class="fas fa-cog"></i>
+            API Docs
+          </button>
+        </div>
       </div>
       <div id="jobs" class="jobs-grid">
         <div class="empty-state">
@@ -649,6 +655,31 @@
             <p>${escapeHtml(err.message)}</p>
           </div>
         `;
+      }
+    }
+
+    async function scanJobs() {
+      const btn = document.getElementById('scanBtn');
+      const originalHTML = btn.innerHTML;
+      
+      try {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning...';
+        
+        const response = await fetch('/api/scan-jobs', { method: 'POST' });
+        const result = await response.json();
+        
+        if (result.success) {
+          alert(`✅ Success!\n\nJobs found: ${result.jobs_found}\nNew matches: ${result.new_matches}\n\n${result.message}`);
+          load(); // Reload the dashboard
+        } else {
+          alert(`❌ Error: ${result.error}`);
+        }
+      } catch (err) {
+        alert(`❌ Error: ${err.message}`);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
       }
     }
 

@@ -87,6 +87,83 @@ def skill_analysis_page(job_id: int):
 def demo_match(job: dict):
     return match_job(job, PROFILE)
 
+@app.post("/api/scan-jobs")
+def scan_jobs_now(db: Session = Depends(get_db)):
+    """Manually trigger job scanning"""
+    try:
+        from agents.job_search import search_jobs
+        from agents.matching_agent import match_job
+        from notification.email import send_email_notification
+        from notification.whatsapp import send_whatsapp_notification
+        import json
+        
+        # Search for jobs
+        jobs = search_jobs()
+        
+        new_matches = []
+        for job_data in jobs:
+            # Check if already exists
+            existing = db.query(Job).filter(Job.url == job_data["url"]).first()
+            if existing:
+                continue
+            
+            # Match job
+            match_result = match_job(job_data, PROFILE)
+            
+            if match_result["score"] < settings.min_match_score:
+                continue
+            
+            # Save job
+            job = Job(
+                title=job_data["title"],
+                company=job_data["company"],
+                location=job_data.get("location", "Remote"),
+                description=job_data.get("description", ""),
+                url=job_data["url"],
+                source=job_data.get("source", "remotive"),
+                required_skills=json.dumps(job_data.get("required_skills", [])),
+            )
+            db.add(job)
+            db.flush()
+            
+            # Save match
+            job_match = JobMatch(
+                job_id=job.id,
+                score=match_result["score"],
+                missing_skills=json.dumps(match_result.get("missing_skills", [])),
+                present_skills=json.dumps(match_result.get("present_skills", [])),
+                recommendation=match_result.get("recommendation", ""),
+            )
+            db.add(job_match)
+            new_matches.append((job, job_match))
+        
+        db.commit()
+        
+        # Send notifications if new matches found
+        if new_matches and settings.notify_email_to:
+            try:
+                send_email_notification(new_matches, PROFILE)
+            except:
+                pass
+        
+        if new_matches and settings.whatsapp_to:
+            try:
+                send_whatsapp_notification(new_matches, PROFILE)
+            except:
+                pass
+        
+        return {
+            "success": True,
+            "jobs_found": len(jobs),
+            "new_matches": len(new_matches),
+            "message": f"Found {len(new_matches)} new job matches!"
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
 @app.get("/api/applications")
 def applications(db: Session = Depends(get_db)):
     rows = db.query(Application).order_by(Application.id.desc()).all()
