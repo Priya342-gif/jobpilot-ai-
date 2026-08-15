@@ -93,8 +93,6 @@ def scan_jobs_now(db: Session = Depends(get_db)):
     try:
         from agents.job_search import discover_jobs
         from agents.matching_agent import match_job
-        from notification.email import send_email_notification
-        from notification.whatsapp import send_whatsapp_notification
         import json
         
         # Search for jobs
@@ -140,25 +138,34 @@ def scan_jobs_now(db: Session = Depends(get_db)):
         db.commit()
         
         # Send notifications if new matches found
-        if new_matches and settings.notify_email_to:
+        if new_matches:
             try:
-                send_email_notification(new_matches, PROFILE)
-            except:
-                pass
+                from notification.email import send_email
+                if settings.notify_email_to:
+                    job_list = "\n".join([f"- {j.title} at {j.company} ({m.score}% match)\n  {j.url}" for j, m in new_matches[:5]])
+                    send_email(
+                        subject=f"🎯 {len(new_matches)} New Job Matches Found!",
+                        body=f"JobPilot AI found {len(new_matches)} new jobs matching your profile!\n\nTop Matches:\n{job_list}\n\nVisit your dashboard to see all jobs!"
+                    )
+            except Exception as e:
+                print(f"Email notification failed: {e}")
         
-        if new_matches and settings.whatsapp_to:
             try:
-                send_whatsapp_notification(new_matches, PROFILE)
-            except:
-                pass
+                from notification.whatsapp import send_whatsapp
+                if settings.whatsapp_to:
+                    send_whatsapp(f"🎯 JobPilot AI: Found {len(new_matches)} new job matches! Check your dashboard.")
+            except Exception as e:
+                print(f"WhatsApp notification failed: {e}")
         
         return {
             "success": True,
             "jobs_found": len(jobs),
             "new_matches": len(new_matches),
-            "message": f"Found {len(new_matches)} new job matches!"
+            "message": f"Found {len(new_matches)} new job matches!" if new_matches else "No new matches found."
         }
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return {
             "success": False,
             "error": str(e)
