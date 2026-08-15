@@ -3,6 +3,7 @@ services:
   - type: web
     name: jobpilot-ai-web
     env: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
     envVars:
@@ -37,6 +38,7 @@ services:
   - type: worker
     name: jobpilot-ai-worker
     env: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: python -m worker.scheduler
     envVars:
@@ -65,3 +67,4 @@ databases:
   - name: jobpilot-db
     databaseName: jobpilot
     user: jobpilot
+    plan: free
