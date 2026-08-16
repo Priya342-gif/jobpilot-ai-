@@ -727,7 +727,7 @@ candidate.**
 
 ## 👨‍💻 Author
 
-**Ayush Pandey**
+**Priya Chauhan**
 
 B.Tech Artificial Intelligence and Machine Learning
 
