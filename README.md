@@ -741,6 +741,9 @@ Email: chauhanpriya1926@gmail.com
 
 **Status:** Active Development
 
+## Live Demo
+[View Live Project](https://jobpilot-ai-ap50.onrender.com/)
+
 The current project includes the core backend, notification
 integrations, SQLite storage, Docker support, and deployment
 configuration. Job-source integrations, production-scale persistence,
